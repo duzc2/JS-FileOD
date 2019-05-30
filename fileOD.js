@@ -27,17 +27,17 @@
      * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer
      */
     function createOpenFileInput(acceptType, filetype, callback) {
-        $('body').append('<input type="file" style="display:none" id="openFileInput' +
-            openFileInputIdPrefix + (openFileInputId++) +
+        let id = 'openFileInput' + openFileInputIdPrefix + (openFileInputId++);
+        $('body').append('<input type="file" style="display:none" id="' + id +
             '" accept="' + acceptType + '" /> ');
-        openFileInput = $('#openFileInput');
+        openFileInput = $('#' + id);
         openFileInput.change(function () {
             var openFileInputDom = openFileInput[0];
             if (openFileInputDom.files.length === 0) {
                 return;
             }
             var reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onloadend = function (e) {
                 callback(reader.result);
             };
             switch (filetype) {
