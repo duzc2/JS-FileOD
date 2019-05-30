@@ -6,11 +6,11 @@
     /**
      * 
      * @param {string} fileName 
-     * @param {string} content 
+     * @param {string|Blob} content 
      */
     function SaveFile(fileName, content) {
         var aLink = document.createElement('a');
-        var blob = new Blob([content]);
+        var blob = typeof (content) === 'string' ? new Blob([content]) : content;
         aLink.download = fileName;
         aLink.innerHTML = "download";
         aLink.href = URL.createObjectURL(blob);
