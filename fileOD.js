@@ -1,3 +1,7 @@
+/**
+* Anchor duzc2dtw#gmail.com
+* https://github.com/duzc2/JS-FileOD
+*/
 (function () {
 
     var openFileInputId = 0;
