@@ -1,7 +1,7 @@
 /**
-* Anchor duzc2dtw#gmail.com
-* https://github.com/duzc2/JS-FileOD
-*/
+ * Anchor duzc2dtw#gmail.com
+ * https://github.com/duzc2/JS-FileOD
+ */
 (function () {
 
     var openFileInputId = 0;
@@ -30,30 +30,55 @@
      * @param {string} filetype  "text"/"Array​Buffer"
      * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer
      */
-    function createOpenFileInput(acceptType, filetype, callback) {
+    function createOpenFileInput(acceptType, filetype, callback, multiple) {
         let id = 'openFileInput' + openFileInputIdPrefix + (openFileInputId++);
         $('body').append('<input type="file" style="display:none" id="' + id +
-            '" accept="' + acceptType + '" /> ');
+            '" accept="' + acceptType + '" ' + (multiple ? 'multiple' : '') + ' /> ');
         openFileInput = $('#' + id);
         openFileInput.change(function () {
             var openFileInputDom = openFileInput[0];
             if (openFileInputDom.files.length === 0) {
                 return;
             }
-            var reader = new FileReader();
-            reader.onloadend = function (e) {
-                callback(reader.result);
-            };
-            switch (filetype) {
-                case 'text':
-                    reader.readAsText(openFileInputDom.files[0]);
-                    break;
-                case 'Array​Buffer':
-                    reader.readAsArrayBuffer(openFileInputDom.files[0]);
-                    break;
+            if (multiple) {
+                let files = [];
+                let f = function () {
+                    files.push(this.result);
+                    if (files.length == openFileInputDom.files.length) {
+                        callback(files);
+                    }
+                };
+                for (let i = openFileInputDom.files.length - 1; i >= 0; i--) {
+                    var reader = new FileReader();
+                    reader.onloadend = f.bind(reader);
+                    switch (filetype) {
+                        case 'text':
+                            reader.readAsText(openFileInputDom.files[i]);
+                            break;
+                        case 'Array​Buffer':
+                            reader.readAsArrayBuffer(openFileInputDom.files[i]);
+                            break;
+                    }
+                }
+            } else {
+                let r = function (f) {
+                    var reader = new FileReader();
+                    reader.onloadend = function (e) {
+                        callback(reader.result);
+                    };
+                    switch (filetype) {
+                        case 'text':
+                            reader.readAsText(f);
+                            break;
+                        case 'Array​Buffer':
+                            reader.readAsArrayBuffer(f);
+                            break;
+                    }
+                }
+                r(openFileInputDom.files[0]);
             }
             openFileInput.remove();
-            createOpenFileInput();
+            createOpenFileInput(acceptType, filetype, callback, multiple);
         });
     }
 
@@ -63,8 +88,8 @@
      * @param {string} filetype  "text"/"Array​Buffer"
      * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer
      */
-    function OpenFile(acceptType, filetype, callback) {
-        createOpenFileInput(acceptType, filetype, callback);
+    function OpenFile(acceptType, filetype, callback, multiple) {
+        createOpenFileInput(acceptType, filetype, callback, !!multiple);
         openFileInput.click();
     }
 
