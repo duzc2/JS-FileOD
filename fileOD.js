@@ -40,6 +40,14 @@
             if (openFileInputDom.files.length === 0) {
                 return;
             }
+            if (filetype == 'object') {
+                if (multiple) {
+                    callback(openFileInputDom.files);
+                } else {
+                    callback(openFileInputDom.files[0]);
+                }
+                return;
+            }
             if (multiple) {
                 let files = [];
                 let f = function () {
@@ -49,13 +57,16 @@
                     }
                 };
                 for (let i = openFileInputDom.files.length - 1; i >= 0; i--) {
-                    var reader = new FileReader();
-                    reader.onloadend = f.bind(reader);
+                    let reader;
                     switch (filetype) {
                         case 'text':
+                            reader = new FileReader();
+                            reader.onloadend = f.bind(reader);
                             reader.readAsText(openFileInputDom.files[i]);
                             break;
                         case 'Array​Buffer':
+                            reader = new FileReader();
+                            reader.onloadend = f.bind(reader);
                             reader.readAsArrayBuffer(openFileInputDom.files[i]);
                             break;
                     }
