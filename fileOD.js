@@ -42,7 +42,11 @@
             }
             if (filetype == 'object') {
                 if (multiple) {
-                    callback(openFileInputDom.files);
+                    let files = [];
+                    for(let i = 0;i<openFileInputDom.files.length;i++){
+                        files.push(openFileInputDom.files[i]);
+                    }
+                    callback(files);
                 } else {
                     callback(openFileInputDom.files[0]);
                 }
