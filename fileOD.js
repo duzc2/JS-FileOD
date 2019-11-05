@@ -27,8 +27,8 @@
     /**
      * 
      * @param {string} acceptType  file postfix
-     * @param {string} filetype  "text"/"Array​Buffer"
-     * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer
+     * @param {string} filetype  "text"/"Array​Buffer/File"
+     * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer , File File
      */
     function createOpenFileInput(acceptType, filetype, callback, multiple) {
         let id = 'openFileInput' + openFileInputIdPrefix + (openFileInputId++);
@@ -40,7 +40,7 @@
             if (openFileInputDom.files.length === 0) {
                 return;
             }
-            if (filetype == 'object') {
+            if (filetype == 'File') {
                 if (multiple) {
                     let files = [];
                     for(let i = 0;i<openFileInputDom.files.length;i++){
@@ -100,8 +100,9 @@
     /**
      * 
      * @param {string} acceptType  file postfix
-     * @param {string} filetype  "text"/"Array​Buffer"
-     * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer
+     * @param {string} filetype  "text"/"Array​Buffer/File"
+     * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer , File File
+     * @param {bool} multiple allow mutiple files
      */
     function OpenFile(acceptType, filetype, callback, multiple) {
         createOpenFileInput(acceptType, filetype, callback, !!multiple);
@@ -109,11 +110,13 @@
     }
 
     var FileOD = {};
+
     /**
      * 
      * @param {string} acceptType  file postfix
-     * @param {string} filetype  "text"/"Array​Buffer"
-     * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer
+     * @param {string} filetype  "text"/"Array​Buffer/File"
+     * @param {function(data)} callback filetype text:string , filetype Array​Buffer:Array​Buffer , File File
+     * @param {bool} multiple allow mutiple files
      */
     FileOD.Open = OpenFile;
     /**
