@@ -14,7 +14,9 @@
      */
     function SaveFile(fileName, content) {
         var aLink = document.createElement('a');
-        var blob = typeof (content) === 'string' ? new Blob([content]) : content;
+        var blob = typeof (content) === 'string' ? new Blob([content], {
+            type: 'application/octet-stream'
+        }) : content;
         aLink.download = fileName;
         aLink.innerHTML = "download";
         aLink.href = URL.createObjectURL(blob);
@@ -43,7 +45,7 @@
             if (filetype == 'File') {
                 if (multiple) {
                     let files = [];
-                    for(let i = 0;i<openFileInputDom.files.length;i++){
+                    for (let i = 0; i < openFileInputDom.files.length; i++) {
                         files.push(openFileInputDom.files[i]);
                     }
                     callback(files);
